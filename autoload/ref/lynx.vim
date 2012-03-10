@@ -11,11 +11,15 @@ if !exists('g:ref_lynx_cmd')
 endif
 
 if !exists('g:ref_lynx_encoding')
-	let g:ref_lynx_encoding = &termencoding
+	let g:ref_lynx_encoding = 'char'
 endif
 
 if !exists('g:ref_lynx_use_cache')
 	let g:ref_lynx_use_cache = 0
+endif
+
+if !exists('g:ref_lynx_hide_url_number')
+	let g:ref_lynx_hide_url_number = 1
 endif
 
 
@@ -81,12 +85,18 @@ function! s:syntax(query)
 	syntax match refLynxURL "\[\d*\]\w*" contains=refLynxURLNo
 	syntax match refLynxURLNo "\[\d*\]" contained conceal
 
-	highlight refLynxURL term=bold gui=bold
-	setlocal conceallevel=2
+	highlight refLynxURL term=bold cterm=bold gui=bold
+
+	if g:ref_lynx_hide_url_number
+		setlocal conceallevel=2
+	endif
 	setlocal concealcursor=n
 
 	nnoremap <silent><buffer> <CR> :execute " ".<SID>open_url_cmd()<CR>
-	autocmd CursorMoved <buffer> echom <SID>get_url()
+	
+	augroup ref-lynx
+		autocmd CursorMoved <buffer> echo <SID>get_url()
+	augroup END
 endfunction
 
 " iconv() wrapper for safety.
