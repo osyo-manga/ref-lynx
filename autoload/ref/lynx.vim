@@ -2,7 +2,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-
 if !exists('g:ref_lynx_start_linenumber')
   let g:ref_lynx_start_linenumber = 0
 endif
